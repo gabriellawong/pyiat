@@ -119,7 +119,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
         overall_err_cut=.3,cond_err_cut=.4,block_err_cut=.4,\
         overall_fastslowRT_cut=.10,cond_fastslowRT_cut=.25,block_fastslowRT_cut=.25,\
         num_blocks_cutoff=4,\
-        fastslow_stats=False,error_or_correct='correct',flag_outformat='pct',print_to_excel=False,\
+        fastslow_stats=False,error_or_correct='correct',errors_after_fastslow_rmvd=False,flag_outformat='pct',print_to_excel=False,\
         each_stim=False,stimulus=False):
 
     """Takes a dataframe containing raw IAT data (all trials, all subjects) and returns
@@ -169,6 +169,8 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
          Cutoff for subject exclusion: Number of blocks required, default : 4
      error_or_correct : str
          Enter 'error' to enter a column for 'correct' where error = 1, correct = 0, default: 'correct'
+     errors_after_fastslow_rmvd : Boolean
+            If True calculates error rates after removing all fast\slow trials (similar to R package iat); if False error rates calculated with all trials, default : False
      fastslow_stats : Boolean
          Return a second dataframe containing the number and percentage of fast\slow trials across all subjects
          and across subjects with usable data, default : False
@@ -254,13 +256,21 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
         ##########################################################################################
         #Get overall pct of errors, fast trials, slow trials as well as pct per condition and per block
         ##########################################################################################
+        
+        #Remove trials that are too fast or too slow
+        df_fastslow_rts_rmvd=df[-(df[rt]>=slow_rt)]
+        df_fastslow_rts_rmvd=df_fastslow_rts_rmvd[-(df_fastslow_rts_rmvd[rt]<fast_rt)]
 
         ##Errors
+        if errors_after_fastslow_rmvd == False:
+            df_err=df
+        elif errors_after_fastslow_rmvd == True:
+            df_err=df_fastslow_rts_rmvd
         ###Can enter either column where errors are 1 and correct responses are 0 or vice versa
         if error_or_correct=='error':
-            err_vars=blcnd_extract(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat)
+            err_vars=blcnd_extract(df_err,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat)
         elif error_or_correct=='correct':
-            err_vars=1-blcnd_extract(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat)
+            err_vars=1-blcnd_extract(df_err,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat)
 
         #Fast RT
         df['fast_rt']=(df[rt]<fast_rt)*1
@@ -301,13 +311,9 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
         all_fast_rt_pct_all_subs=df[df[rt]<fast_rt][rt].count()/df[rt].count().astype(float)
         all_slow_rt_pct_all_subs=df[df[rt]>=slow_rt][rt].count()/df[rt].count().astype(float)
 
-        #Remove trials that are too fast or too slow
-        df_fastslow_rts_rmved=df[-(df[rt]>=slow_rt)]
-        df_fastslow_rts_rmved=df_fastslow_rts_rmved[-(df_fastslow_rts_rmved[rt]<fast_rt)]
-
         #Figure out number of trials after removing fast\slow rt trials 
         #in each block and total number of fast and slow trials (and remove them)
-        post_trl_count_vars=blcnd_extract(df_fastslow_rts_rmved,rt,subject,condition,block,cond1,cond2,blocks,flag_outformat='count')
+        post_trl_count_vars=blcnd_extract(df_fastslow_rts_rmvd,rt,subject,condition,block,cond1,cond2,blocks,flag_outformat='count')
         incl_excl_switch='excl'
         block_num_col_names=['overall_num_trls_%s_fastslow_rt'%(incl_excl_switch),\
         '%s_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch),\
@@ -346,13 +352,22 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
         ##########################################################################################
         #Get overall pct of errors, fast trials, slow trials as well as pct per condition and per block
         ##########################################################################################
+        
+        #Remove trials that are too fast or too slow
+        df_fastslow_rts_rmvd=df[-(df[rt]>=slow_rt)]
+        df_fastslow_rts_rmvd=df_fastslow_rts_rmvd[-(df_fastslow_rts_rmvd[rt]<fast_rt)]
 
         ##Errors
+        if errors_after_fastslow_rmvd == False:
+            df_err=df
+        elif errors_after_fastslow_rmvd == True:
+            df_err=df_fastslow_rts_rmvd
+        
         ###Can enter either column where errors are 1 and correct responses are 0 or vice versa
         if error_or_correct=='error':
-            err_vars=blcnd_extract(df,errs,subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks=False)
+            err_vars=blcnd_extract(df_err,errs,subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks=False)
         elif error_or_correct=='correct':
-            err_vars=1-blcnd_extract(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks=False)
+            err_vars=1-blcnd_extract(df_err,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks=False)
 
         #Fast RT
         df['fast_rt']=(df[rt]<fast_rt)*1
@@ -390,12 +405,12 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
         all_slow_rt_pct_all_subs=df[df[rt]>=slow_rt][rt].count()/df[rt].count().astype(float)
 
         #Remove trials that are too fast or too slow
-        df_fastslow_rts_rmved=df[-(df[rt]>=slow_rt)]
-        df_fastslow_rts_rmved=df_fastslow_rts_rmved[-(df_fastslow_rts_rmved[rt]<fast_rt)]
+        df_fastslow_rts_rmvd=df[-(df[rt]>=slow_rt)]
+        df_fastslow_rts_rmvd=df_fastslow_rts_rmvd[-(df_fastslow_rts_rmvd[rt]<fast_rt)]
 
         #Figure out number of trials after removing fast\slow rt trials 
         #in each block and total number of fast and slow trials (and remove them)
-        post_trl_count_vars=blcnd_extract(df_fastslow_rts_rmved,rt,subject,condition,block,cond1,cond2,blocks,include_blocks=False,flag_outformat='count')
+        post_trl_count_vars=blcnd_extract(df_fastslow_rts_rmvd,rt,subject,condition,block,cond1,cond2,blocks,include_blocks=False,flag_outformat='count')
         incl_excl_switch='excl'
         block_num_col_names=['overall_num_trls_%s_fastslow_rt'%(incl_excl_switch),\
         '%s_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch)]
@@ -404,11 +419,11 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
     all_num_trl_per_block=pd.concat([pre_trl_count_vars,post_trl_count_vars],axis=1)
     #Get D scores
     if each_stim==False:
-        d=iat_get_dscore(df_fastslow_rts_rmved,subject,rt,block,condition,cond1,cond2,blocks,weighted)
+        d=iat_get_dscore(df_fastslow_rts_rmvd,subject,rt,block,condition,cond1,cond2,blocks,weighted)
         if weighted == False:
             d=d.to_frame()
     elif each_stim==True:
-        d=iat_get_dscore_each_stim(df_fastslow_rts_rmved,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted)
+        d=iat_get_dscore_each_stim(df_fastslow_rts_rmvd,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted)
         d=d.unstack()
     
     all_iat_out = pd.concat([all_num_trl_per_block,rates,flags,d],axis=1)
