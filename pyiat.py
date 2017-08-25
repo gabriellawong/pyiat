@@ -140,9 +140,9 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
      condition : str
          Column name containing condition (e.g. Black-Good\White-Bad vs. Black-Bad\White-Good)
      cond1 : str
-         Name of first of two conditions (e.g. 'Black-Good\White-Bad'): bias for this condition will result in positive D score  
+         Name of first condition (e.g. 'Black-Good\White-Bad'): bias for this condition will result in negative D score  
      cond2 : str
-         Name of second of two conditions (e.g. 'Black-Bad\White-Good'): bias for this condition will result in negative D score
+         Name of second condition (e.g. 'Black-Bad\White-Good'): bias for this condition will result in positive D score
      block : str
          Column that contains block information
      blocks : list
