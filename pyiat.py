@@ -114,7 +114,7 @@ def blcnd_extract(df,var,subject,condition,block,cond1,cond2,blocks,flag_outform
         out=pd.concat([all_df,cond1_df,cond2_df],axis=1)
     return(out)
 
-def iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,6],weighted=True,\
+def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,6],weighted=True,\
         fast_rt=400,slow_rt=10000,\
         overall_err_cut=.3,cond_err_cut=.4,block_err_cut=.4,\
         overall_fastslowRT_cut=.10,cond_fastslowRT_cut=.25,block_fastslowRT_cut=.25,\
@@ -122,79 +122,86 @@ def iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,6],weigh
         fastslow_stats=False,error_or_correct='correct',flag_outformat='pct',print_to_excel=False,\
         each_stim=False,stimulus=False):
 
-        """Takes a dataframe containing raw IAT data (all trials, all subjects) and returns
-            the number of blocks, percentage of errors, reaction times that are too fast and too slow, 
-            flags to remove subjects and D scores for each subject.
+    """Takes a dataframe containing raw IAT data (all trials, all subjects) and returns
+         the number of blocks, percentage of errors, reaction times that are too fast and too slow, 
+         flags to remove subjects and D scores for each subject.
 
-        Parameters
-        ----------
-        df : pandas dataframe 
-            Containing raw IAT data
-        subject : str
-            Column name containing subject number
-        rt : str
-            Column name containing reaction time (in ms) for each trial
-        correct : str
-            Column name containing whether trial was correct (where correct = 1, error = 0)
-            (can also use if columns specifies errors; see 'error_or_correct' parameter)
-        condition : str
-            Column name containing condition (e.g. Black-Good\White-Bad vs. Black-Bad\White-Good)
-        cond1 : str
-            Name of first of two conditions (e.g. 'Black-Good\White-Bad')
-        cond2 : str
-            Name of second of two conditions (e.g. 'Black-Bad\White-Good')
-        block : str
-            Column that contains block information
-        blocks : list
-            A list containing the numbers corresponding to the relevant blocks, default : [2,3,5,6]
-        weighted : Boolean
-            If True return weighted D scores; if False return unweighted D scores, default : True
-        fast_rt : int
-            Reaction time (in ms) that is too fast, default: 400
-        slow_rt : int
-            Reaction time (in ms) that is too slow, default: 10000
-        overall_err_cut : float
-            Cutoff for subject exclusion: overall error rate (decimal), default : .3
-        cond_err_cut : float
-            Cutoff for subject exclusion: error rate (decimal) within each condition, default : .4
-        block_err_cut : float
-            Cutoff for subject exclusion: error rate (decimal) within a single block, default : .4
-        overall_fastslowRT_cut=.10
-            Cutoff for subject exclusion: overall rate of trials with too fast or too slow RT (decimal), default : .1
-        cond_fastslowRT_cut : float
-            Cutoff for subject exclusion: rate of trials with too fast or too slow RT (decimal) within each condition, default : .25
-        block_fastslowRT_cut : float
-            Cutoff for subject exclusion: rate of trials with too fast or too slow RT (decimal) within each block, default : .25
-        num_blocks_cutoff : int
-            Cutoff for subject exclusion: Number of blocks required, default : 4
-        error_or_correct : str
-            Enter 'error' to enter a column for 'correct' where error = 1, correct = 0, default: 'correct'
-        fastslow_stats : Boolean
-            Return a second dataframe containing the number and percentage of fast\slow trials across all subjects
-            and across subjects with usable data, default : False
-        flag_outformat : str
-            Can enter 'count' to return number of errors and too fast\slow trials (if fastslow_stats set to True), default : 'pct'
-        print_to_excel : Boolean
-            Print an excel workbook that contains output, default : False
-        each_stim : Boolean
-            Return D scores for each individual stimulus (i.e. word), default : False
-        stimulus
-            If each stim = True, then give name of column containing each stimulus (i.e. word), default : False
+     Parameters
+     ----------
+     df : pandas dataframe 
+         Containing raw IAT data
+     subject : str
+         Column name containing subject number
+     rt : str
+         Column name containing reaction time (in ms) for each trial
+     correct : str
+         Column name containing whether trial was correct (where correct = 1, error = 0)
+         (can also use if columns specifies errors; see 'error_or_correct' parameter)
+     condition : str
+         Column name containing condition (e.g. Black-Good\White-Bad vs. Black-Bad\White-Good)
+     cond1 : str
+         Name of first of two conditions (e.g. 'Black-Good\White-Bad'): bias for this condition will result in positive D score  
+     cond2 : str
+         Name of second of two conditions (e.g. 'Black-Bad\White-Good'): bias for this condition will result in negative D score
+     block : str
+         Column that contains block information
+     blocks : list
+         A list containing the numbers corresponding to the relevant blocks, default : [2,3,5,6]
+     weighted : Boolean
+         If True return weighted D scores; if False return unweighted D scores, default : True
+     fast_rt : int
+         Reaction time (in ms) that is too fast, default: 400
+     slow_rt : int
+         Reaction time (in ms) that is too slow, default: 10000
+     overall_err_cut : float
+         Cutoff for subject exclusion: overall error rate (decimal), default : .3
+     cond_err_cut : float
+         Cutoff for subject exclusion: error rate (decimal) within each condition, default : .4
+     block_err_cut : float
+         Cutoff for subject exclusion: error rate (decimal) within a single block, default : .4
+     overall_fastslowRT_cut=.10
+         Cutoff for subject exclusion: overall rate of trials with too fast or too slow RT (decimal), default : .1
+     cond_fastslowRT_cut : float
+         Cutoff for subject exclusion: rate of trials with too fast or too slow RT (decimal) within each condition, default : .25
+     block_fastslowRT_cut : float
+         Cutoff for subject exclusion: rate of trials with too fast or too slow RT (decimal) within each block, default : .25
+     num_blocks_cutoff : int
+         Cutoff for subject exclusion: Number of blocks required, default : 4
+     error_or_correct : str
+         Enter 'error' to enter a column for 'correct' where error = 1, correct = 0, default: 'correct'
+     fastslow_stats : Boolean
+         Return a second dataframe containing the number and percentage of fast\slow trials across all subjects
+         and across subjects with usable data, default : False
+     flag_outformat : str
+         Can enter 'count' to return number of errors and too fast\slow trials (if fastslow_stats set to True), default : 'pct'
+     print_to_excel : Boolean
+         Print an excel workbook that contains output, default : False
+     each_stim : Boolean
+         Return D scores for each individual stimulus (i.e. word), default : False
+     stimulus
+         If each stim = True, then give name of column containing each stimulus (i.e. word), default : False
 
-        Returns
-        -------
-        DataFrame
+     Returns
+     -------
+     pandas DataFrame with 
+        -error rates (overall, each condition, each block (error rates *include* fast\slow trials)),
+        -rates of fast\slow trials (overall, each condition, each block)
+        -exclusion flags (overall flag indicating subject should be excluded and for each category informing why subject was flagged)
+        -D scores (overall and block 1 and block 2 if weighted)
+    if fastslow_stats = True:
+        pandas DataFrame with rates of fast\slow trials across all subjects and across only subjects NOT flagged for exclusion
+        (to report the overall number\pct of trials excluded from a study)
 
-        Examples
-        --------
-        >>> weighted_d,fastslow_stats_df=iat(it,subject='session_id',rt='latency',
-        ...                 condition='cond',correct='correct',
-        ...                 cond1='nosh_me',cond2='sh_me',block='block',
-        ...                 blocks=[2,3,5,6],fastslow_stats=True,each_stim=False,
-        ...                 stimulus='trial_name')
-
-
-        """
+     Examples
+     --------
+     >>> weighted_d,fastslow_stats_df=iat(it,subject='session_id',rt='latency',
+     ...                 condition='cond',correct='correct',
+     ...                 cond1='nosh_me',cond2='sh_me',block='block',
+     ...                 blocks=[2,3,5,6],fastslow_stats=True,each_stim=False,
+     ...                 stimulus='trial_name')
+    
+    
+     """
     import pandas as pd
     from pandas import ExcelWriter
     import numpy as np
@@ -251,7 +258,7 @@ def iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,6],weigh
         ##Errors
         ###Can enter either column where errors are 1 and correct responses are 0 or vice versa
         if error_or_correct=='error':
-            err_vars=blcnd_extract(df,errs,subject,condition,block,cond1,cond2,blocks,flag_outformat)
+            err_vars=blcnd_extract(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat)
         elif error_or_correct=='correct':
             err_vars=1-blcnd_extract(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat)
 
