@@ -103,7 +103,7 @@ def overall_fast_slow_stats(df,rt,fast_rt,slow_rt,subject,flags):
     return(all_fast_slow_rt)
 
 
-def iat_get_dscore(df,subject,rt,block,condition,cond1,cond2,blocks,weighted,each_stim=False,stimulus=False):
+def iat_get_dscore(df,subject,rt,block,condition,cond1,cond2,blocks,weighted,each_stim,stimulus):
 
     #Get D scores
     if each_stim==False:
@@ -204,10 +204,8 @@ def num_trls_column_names(cond1,cond2,fast_rt,slow_rt,incl_excl_switch,weighted)
             '%s_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch)]
         return(block_num_col_names)
 
-def get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat,\
+def get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks,\
     rt,fast_rt,slow_rt,error_or_correct,weighted,errors_after_fastslow_rmvd,df_fastslow_rts_rmvd):
-
-    include_blocks=weighted
 
    ##Errors
     if errors_after_fastslow_rmvd == False:
@@ -222,11 +220,11 @@ def get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,bloc
 
     #Fast RT
     df['fast_rt']=(df[rt]<fast_rt)*1
-    fast_rt_vars=blcnd_extract(df,'fast_rt',subject,condition,block,cond1,cond2,blocks,flag_outformat)
+    fast_rt_vars=blcnd_extract(df,'fast_rt',subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks)
 
     #Slow RT
     df['slow_rt']=(df[rt]>=slow_rt)*1
-    slow_rt_vars=blcnd_extract(df,'slow_rt',subject,condition,block,cond1,cond2,blocks,flag_outformat)
+    slow_rt_vars=blcnd_extract(df,'slow_rt',subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks)
 
     if weighted == True:
         ## Number of blocks for each subject
@@ -237,7 +235,7 @@ def get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,bloc
         slow_rt_vars,\
         num_blocks]
 
-    elif weighted == True:
+    elif weighted == False:
         outcms=[err_vars,\
         fast_rt_vars,\
         slow_rt_vars]
@@ -336,11 +334,14 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
      """
     from pandas import ExcelWriter
     idx=pd.IndexSlice
-    df=df[(df[condition]==cond1)|(df[condition]==cond2)]
-    df=df[df.block.isin(blocks)]
+    df=df[(df[condition]==cond1)|(df[condition]==cond2)].copy(deep=True)
 
     if df[df[correct]>1].shape[0]!=0 or df[df[correct]<0].shape[0]!=0:
         return(print('The \'correct\' column can only contain the values 0 and 1'))
+
+    #For weighted d scores, we return all block-related stats whereas 
+    #for unweighted we are just comparing conditions and care less about blocks
+    include_blocks=weighted
 
     #Make column names
     col_names,flag_col_names=error_fastslow_column_names(cond1,cond2,fast_rt,slow_rt,weighted)
@@ -352,15 +353,15 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
     df_fastslow_rts_rmvd=df_fastslow_rts_rmvd[-(df_fastslow_rts_rmvd[rt]<fast_rt)]
 
     #Get error and fast\slow trials
-    outcms=get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat,\
+    outcms=get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks,\
     rt,fast_rt,slow_rt,error_or_correct,weighted,errors_after_fastslow_rmvd,df_fastslow_rts_rmvd)
 
     #Figure out number of trials after removing fast\slow rt trials 
     #in each block and total number of fast and slow trials (and remove them)
-    pre_trl_count_vars=blcnd_extract(df,rt,subject,condition,block,cond1,cond2,blocks,flag_outformat='count')
+    pre_trl_count_vars=blcnd_extract(df,rt,subject,condition,block,cond1,cond2,blocks,flag_outformat='count',include_blocks=include_blocks)
     pre_trl_count_vars.columns=block_num_col_names_incl
 
-    post_trl_count_vars=blcnd_extract(df_fastslow_rts_rmvd,rt,subject,condition,block,cond1,cond2,blocks,flag_outformat='count')
+    post_trl_count_vars=blcnd_extract(df_fastslow_rts_rmvd,rt,subject,condition,block,cond1,cond2,blocks,flag_outformat='count',include_blocks=include_blocks)
     post_trl_count_vars.columns=block_num_col_names_excl
 
     if weighted == True:
