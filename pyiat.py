@@ -337,6 +337,10 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
     from pandas import ExcelWriter
     idx=pd.IndexSlice
     df=df[(df[condition]==cond1)|(df[condition]==cond2)]
+    df=df[df.block.isin(blocks)]
+
+    if df[df[correct]>1].shape[0]!=0 or df[df[correct]<0].shape[0]!=0:
+        return(print('The \'correct\' column can only contain the values 0 and 1'))
 
     #Make column names
     col_names,flag_col_names=error_fastslow_column_names(cond1,cond2,fast_rt,slow_rt,weighted)
