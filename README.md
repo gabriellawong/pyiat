@@ -1,4 +1,5 @@
 # pyiat
 Analyze Implicit Association Test data
 
-See example Jupyter notebook for usage
+Input is a single pandas dataframe with every trial for all subjects (long format).
+See example Jupyter notebook for usage.
