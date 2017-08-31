@@ -4,6 +4,13 @@ from pandas import ExcelWriter
 
 def iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted):
 
+    '''
+    Take all relevant columns and produce a D score for each stimulus (i.e. word).
+    
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
+
     idx=pd.IndexSlice
     df=df[(df[condition]==cond1)|(df[condition]==cond2)]
     if weighted==True:
@@ -40,6 +47,12 @@ def iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,
 
 
 def iat_get_dscore_across_stim(df,subject,rt,block,condition,cond1,cond2,blocks,weighted):
+    '''
+    Take all relevant columns and produce a D score across all stimuli (i.e. words), which is standard.
+
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
     idx=pd.IndexSlice
     df=df[(df[condition]==cond1)|(df[condition]==cond2)]    
     if weighted==True:
@@ -74,7 +87,32 @@ def iat_get_dscore_across_stim(df,subject,rt,block,condition,cond1,cond2,blocks,
         d.name='dscore'
         return(d)
 
+def iat_get_dscore(df,subject,rt,block,condition,cond1,cond2,blocks,weighted,each_stim,stimulus):
+    '''
+    Select either iat_get_dscore_across_stim or iat_get_dscore_each_stim, depending on the each_stim argument.
+
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
+
+    #Get D scores
+    if each_stim==False:
+        d=iat_get_dscore_across_stim(df,subject,rt,block,condition,cond1,cond2,blocks,weighted)
+        if weighted == False:
+            d=d.to_frame()
+    elif each_stim==True:
+        d=iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted)
+        d=d.unstack()
+    return(d)
+
+
 def overall_fast_slow_stats(df,rt,fast_rt,slow_rt,subject,flags):
+    '''
+    Return the total number of trials removed across all subjects and across those without flags for poor performance.
+
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
 
     #Count all fast and slow trials across all subjects
     all_fast_rt_count_all_subs=df[df[rt]<fast_rt][rt].count()
@@ -103,19 +141,16 @@ def overall_fast_slow_stats(df,rt,fast_rt,slow_rt,subject,flags):
     return(all_fast_slow_rt)
 
 
-def iat_get_dscore(df,subject,rt,block,condition,cond1,cond2,blocks,weighted,each_stim,stimulus):
-
-    #Get D scores
-    if each_stim==False:
-        d=iat_get_dscore_across_stim(df,subject,rt,block,condition,cond1,cond2,blocks,weighted)
-        if weighted == False:
-            d=d.to_frame()
-    elif each_stim==True:
-        d=iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted)
-        d=d.unstack()
-    return(d)
-
 def blcnd_extract(df,var,subject,condition,block,cond1,cond2,blocks,flag_outformat='pct',include_blocks=True):
+    '''
+    Generic groupby function to group by subject depending on condition 
+    and groupby condition and block (or just condition if unweighted) to 
+    extract particular variables (errors, too fast\too slow) by condition and block.
+
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
+
     idx=pd.IndexSlice
     if flag_outformat=='pct':
         all_df=df.groupby(subject)[var].mean()
@@ -156,6 +191,12 @@ def blcnd_extract(df,var,subject,condition,block,cond1,cond2,blocks,flag_outform
 
 
 def error_fastslow_column_names(cond1,cond2,fast_rt,slow_rt,weighted):
+    '''
+    Provide names for columns that include the condition name as well as the ms entered for too fast\too slow trials.
+
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
     if weighted == True:
 
         #All column names for output
@@ -190,23 +231,30 @@ def error_fastslow_column_names(cond1,cond2,fast_rt,slow_rt,weighted):
     return(col_names,flag_col_names)
 
 def num_trls_column_names(cond1,cond2,fast_rt,slow_rt,incl_excl_switch,weighted):
-        #Column names for number of trials overall, within condition and within block 
-        #(with a switch to name both before and after excluding fast\slow trials)
-        #incl_excl_switch='excl'
-        #incl_excl_switch='incl'
-        if weighted == True:
-            block_num_col_names=['overall_num_trls_%s_fastslow_rt'%(incl_excl_switch),\
-            '%s_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch),\
-            '%s_bl1_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_bl2_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),\
-            '%s_bl1_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch),'%s_bl2_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch)]
-        elif weighted == False:
-            block_num_col_names=['overall_num_trls_%s_fastslow_rt'%(incl_excl_switch),\
-            '%s_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch)]
-        return(block_num_col_names)
+    '''Column names for number of trials overall, within condition and within block 
+       (with a switch to name both before and after excluding fast\slow trials).
+
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
+    if weighted == True:
+        block_num_col_names=['overall_num_trls_%s_fastslow_rt'%(incl_excl_switch),\
+        '%s_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch),\
+        '%s_bl1_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_bl2_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),\
+        '%s_bl1_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch),'%s_bl2_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch)]
+    elif weighted == False:
+        block_num_col_names=['overall_num_trls_%s_fastslow_rt'%(incl_excl_switch),\
+        '%s_num_trls_%s_fastslow_rt'%(cond1,incl_excl_switch),'%s_num_trls_%s_fastslow_rt'%(cond2,incl_excl_switch)]
+    return(block_num_col_names)
 
 def get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,blocks,flag_outformat,include_blocks,\
     rt,fast_rt,slow_rt,error_or_correct,weighted,errors_after_fastslow_rmvd,df_fastslow_rts_rmvd):
-
+    '''
+    Uses blcnd_extract function to get error rates, fast slow rates, etc... 
+  
+    08-2017
+    Alexander Millner <alexmillner@gmail.com
+    '''
    ##Errors
     if errors_after_fastslow_rmvd == False:
         df_err=df
@@ -330,8 +378,21 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
      ...                 blocks=[2,3,5,6],fastslow_stats=True,each_stim=False,
      ...                 stimulus='trial_name')
     
-    
-     """
+    Copyright (C) 2017 Alexander Millner <alexmillner@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    """
 
     idx=pd.IndexSlice
     df=df[(df[condition]==cond1)|(df[condition]==cond2)].copy(deep=True)
