@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-
+from pandas import ExcelWriter
 
 def iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted):
 
@@ -332,12 +332,12 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
     
     
      """
-    from pandas import ExcelWriter
+
     idx=pd.IndexSlice
     df=df[(df[condition]==cond1)|(df[condition]==cond2)].copy(deep=True)
 
     if df[df[correct]>1].shape[0]!=0 or df[df[correct]<0].shape[0]!=0:
-        return(print('The \'correct\' column can only contain the values 0 and 1'))
+        raise ValueError('The \'correct\' column can only contain the values 0 and 1')
 
     #For weighted d scores, we return all block-related stats whereas 
     #for unweighted we are just comparing conditions and care less about blocks
