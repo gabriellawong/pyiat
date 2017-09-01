@@ -12,7 +12,7 @@ Welcome to pyiat's documentation!
    
    User Guide
    Tutorial
-
+   ...
 
 Indices and tables
 ==================
