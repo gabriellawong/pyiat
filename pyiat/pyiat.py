@@ -44,7 +44,7 @@ def iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,
         d=(d1+d2)/2
     elif weighted==False:
         cnds = df.groupby([subject,stimulus,condition])
-        d = (cnds.latency.mean().unstack()[cond1]-cnds.latency.mean().unstack()[cond2])/df.groupby([subject,stimulus])[rt].std()
+        d = (cnds[rt].mean().unstack()[cond1]-cnds[rt].mean().unstack()[cond2])/df.groupby([subject,stimulus])[rt].std()
 
     return(d)
 
@@ -86,7 +86,7 @@ def iat_get_dscore_across_stim(df,subject,rt,block,condition,cond1,cond2,blocks,
         return(d)
     elif weighted==False:
         cnds = df.groupby([subject,condition])
-        d = (cnds.latency.mean().unstack()[cond1]-cnds.latency.mean().unstack()[cond2])/df.groupby(subject)[rt].std()
+        d = (cnds[rt].mean().unstack()[cond1]-cnds[rt].mean().unstack()[cond2])/df.groupby(subject)[rt].std()
         d.name='dscore'
         return(d)
 
@@ -116,37 +116,35 @@ def biat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2
         b1rt_std=df[(df[block]==blocks[0])|(df[block]==blocks[1])].groupby([subject,stimulus])[rt].std()
         
         if len(blocks)>=4:
-          cond1rt_bl2=blcnd_rt.loc[idx[:,:,cond1,[blocks[2],blocks[3]]]]
-          cond2rt_bl2=blcnd_rt.loc[idx[:,:,cond2,[blocks[2],blocks[3]]]]
-          #Drop block and condidition levels to subtract means
-          cond1rt_bl2.index=cond1rt_bl2.index.droplevel([2,3])
-          cond2rt_bl2.index=cond2rt_bl2.index.droplevel([2,3])   
-
-          b2rt_std=df[(df[block]==blocks[2])|(df[block]==blocks[3])].groupby([subject,stimulus])[rt].std()
-
+            cond1rt_bl2=blcnd_rt.loc[idx[:,:,cond1,[blocks[2],blocks[3]]]]
+            cond2rt_bl2=blcnd_rt.loc[idx[:,:,cond2,[blocks[2],blocks[3]]]]
+            #Drop block and condidition levels to subtract means
+            cond1rt_bl2.index=cond1rt_bl2.index.droplevel([2,3])
+            cond2rt_bl2.index=cond2rt_bl2.index.droplevel([2,3])   
+            b2rt_std=df[(df[block]==blocks[2])|(df[block]==blocks[3])].groupby([subject,stimulus])[rt].std()
         if len(blocks)>=6:
-          cond1rt_bl3=blcnd_rt.loc[idx[:,:,cond1,[blocks[4],blocks[5]]]]
-          cond2rt_bl3=blcnd_rt.loc[idx[:,:,cond2,[blocks[4],blocks[5]]]]
-          #Drop block and condidition levels to subtract means
-          cond1rt_bl3.index=cond1rt_bl3.index.droplevel([2,3])
-          cond2rt_bl3.index=cond2rt_bl3.index.droplevel([2,3]) 
-          b3rt_std=df[(df[block]==blocks[4])|(df[block]==blocks[5])].groupby([subject,stimulus])[rt].std()
+            cond1rt_bl3=blcnd_rt.loc[idx[:,:,cond1,[blocks[4],blocks[5]]]]
+            cond2rt_bl3=blcnd_rt.loc[idx[:,:,cond2,[blocks[4],blocks[5]]]]
+            #Drop block and condidition levels to subtract means
+            cond1rt_bl3.index=cond1rt_bl3.index.droplevel([2,3])
+            cond2rt_bl3.index=cond2rt_bl3.index.droplevel([2,3]) 
+            b3rt_std=df[(df[block]==blocks[4])|(df[block]==blocks[5])].groupby([subject,stimulus])[rt].std()
 
         if len(blocks)==2:
-          d=(cond1rt_bl1-cond2rt_bl1)/b1rt_std
+            d=(cond1rt_bl1-cond2rt_bl1)/b1rt_std
         elif len(blocks)==4:
-          d1=(cond1rt_bl1-cond2rt_bl1)/b1rt_std
-          d2=(cond1rt_bl2-cond2rt_bl2)/b2rt_std
-          d=(d1+d2)/2
+            d1=(cond1rt_bl1-cond2rt_bl1)/b1rt_std
+            d2=(cond1rt_bl2-cond2rt_bl2)/b2rt_std
+            d=(d1+d2)/2
         elif len(blocks)==6:
-          d1=(cond1rt_bl1-cond2rt_bl1)/b1rt_std
-          d2=(cond1rt_bl2-cond2rt_bl2)/b2rt_std
-          d3=(cond1rt_bl3-cond2rt_bl3)/b3rt_std
-          d=(d1+d2+d3)/2
+            d1=(cond1rt_bl1-cond2rt_bl1)/b1rt_std
+            d2=(cond1rt_bl2-cond2rt_bl2)/b2rt_std
+            d3=(cond1rt_bl3-cond2rt_bl3)/b3rt_std
+            d=(d1+d2+d3)/2
 
     elif weighted==False:
         cnds = df.groupby([subject,stimulus,condition])
-        d = (cnds.latency.mean().unstack()[cond1]-cnds.latency.mean().unstack()[cond2])/df.groupby([subject,stimulus])[rt].std()
+        d = (cnds[rt].mean().unstack()[cond1]-cnds[rt].mean().unstack()[cond2])/df.groupby([subject,stimulus])[rt].std()
 
     return(d)
 
@@ -212,7 +210,7 @@ def biat_get_dscore_across_stim(df,subject,rt,block,condition,cond1,cond2,blocks
         return(d)
     elif weighted==False:
         cnds = df.groupby([subject,stimulus,condition])
-        d = (cnds.latency.mean().unstack()[cond1]-cnds.latency.mean().unstack()[cond2])/df.groupby(subject)[rt].std()
+        d = (cnds[rt].mean().unstack()[cond1]-cnds[rt].mean().unstack()[cond2])/df.groupby(subject)[rt].std()
         d.name='dscore'
         return(d)
 
@@ -460,7 +458,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
         overall_err_cut=.3,cond_err_cut=.4,block_err_cut=.4,\
         overall_fastslowRT_cut=.10,cond_fastslowRT_cut=.25,block_fastslowRT_cut=.25,\
         num_blocks_cutoff=4,\
-        fastslow_stats=False,biat=False,rmv_xtrls=4,trl_num=False,\
+        fastslow_stats=False,biat=False,biat_rmv_xtrls=4,biat_trl_num=False,\
         error_or_correct='correct',errors_after_fastslow_rmvd=False,flag_outformat='pct',print_to_excel=False,\
         each_stim=False,stimulus=False):
 
@@ -522,10 +520,10 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
               Recommended scoring procedures (Nosek et al. 2014) recommend a flag for fast trials but not slow. 
               This is not currently possible in pyiat. However, you can see the pct of slow and fast trials 
               and create your own flags from this.***
-     rmv_xtrls : int
+     biat_rmv_xtrls : int
           Number of trials to remove from beginning of each block. BIAT recommendad scoring procedures (Nosek et al. 2014) remove first 4 trials of each block b/c 
           they are practice trials but not all BIAT have practice trials, default : 4
-     trl_num : str
+     biat_trl_num : str
           If you select to remove the first x trials from each block, then you must provide the name of the column that contains trial number, default : False
      flag_outformat : str
          Can enter 'count' to return number of errors and too fast\slow trials (if fastslow_stats set to True), default : 'pct'
@@ -589,7 +587,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
     if biat == True:
         df_orig=df.copy()
         #This finds all unique trials numbers, sorts them and must be greater than the 4th item 
-        df=df[df[trl_num]>=sorted(df[trl_num].unique())[rmv_xtrls]]
+        df=df[df[biat_trl_num]>=sorted(df[biat_trl_num].unique())[biat_rmv_xtrls]]
         df.loc[(df[rt]>2000)&(df[rt]<10000),rt]=2000
         df.loc[df[rt]<400,rt]=400
 
@@ -646,6 +644,9 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
     d=iat_get_dscore(df_fastslow_rts_rmvd,subject,rt,block,condition,cond1,cond2,blocks,weighted,biat,each_stim,stimulus)
     
     all_iat_out = pd.concat([all_num_trl_per_block,rates,flags,d],axis=1)
+
+    if each_stim==False:
+        all_iat_out.loc[all_iat_out.dscore.isnull(),'iat_flag']=all_iat_out.loc[all_iat_out.dscore.isnull(),'iat_flag']+1
 
     #Print output to excel
     if print_to_excel==True:
