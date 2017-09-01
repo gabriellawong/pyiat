@@ -469,7 +469,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
      Parameters
      ----------
      df : pandas dataframe 
-         Containing raw IAT data
+         Trial x trial IAT data for each subject
      subject : str
          Column name containing subject number
      rt : str
@@ -490,9 +490,9 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
      weighted : Boolean
          If True return weighted D scores; if False return unweighted D scores, default : True
      fast_rt : int
-         Reaction time (in ms) that is too fast, default: 400
+         Reaction time (in ms) considered too fast, default: 400
      slow_rt : int
-         Reaction time (in ms) that is too slow, default: 10000
+         Reaction time (in ms) considered too slow, default: 10000
      overall_err_cut : float
          Cutoff for subject exclusion: overall error rate (decimal), default : .3
      cond_err_cut : float
@@ -506,7 +506,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
      block_fastslowRT_cut : float
          Cutoff for subject exclusion: rate of trials with too fast or too slow RT (decimal) within each block, default : .25
      num_blocks_cutoff : int
-         Cutoff for subject exclusion: Number of blocks required, default : 4
+         Cutoff for subject exclusion: Minimum number of blocks required, default : 4
      error_or_correct : str
           Enter 'error' to enter a column for 'correct' where error = 1, correct = 0, default: 'correct'
      errors_after_fastslow_rmvd : Boolean
@@ -524,14 +524,14 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,
           Number of trials to remove from beginning of each block. BIAT recommendad scoring procedures (Nosek et al. 2014) remove first 4 trials of each block b/c 
           they are practice trials but not all BIAT have practice trials, default : 4
      biat_trl_num : str
-          If you select to remove the first x trials from each block, then you must provide the name of the column that contains trial number, default : False
+         The name of the column that contains trial number, default : False
      flag_outformat : str
          Can enter 'count' to return number of errors and too fast\slow trials (if fastslow_stats set to True), default : 'pct'
      print_to_excel : Boolean
          Print an excel workbook that contains output, default : False
      each_stim : Boolean
          Return D scores for each individual stimulus (i.e. word), default : False
-     stimulus
+     stimulus : Boolean
          If each stim = True, then give name of column containing each stimulus (i.e. word), default : False
 
      Returns
