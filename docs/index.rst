@@ -10,7 +10,7 @@ pyiat analyzes data from the Implicit Association Test (IAT) consistent with the
 Features
 --------
 
-pyiat currently supports:
+pyiat currently supports the following features:
 
 * Analysis of the IAT and Brief IAT (BIAT) 
 * IAT can be analyzed with weighted or unweighted algorithm
@@ -21,16 +21,7 @@ pyiat currently supports:
 * Can set reaction time for trials considered too fast or too slow
 * Can set cutoffs for error/too fast/too slow flags indiciating that a participant is excluded for poor performance
 * Can print output to Excel 
- 
-Source code
------------
 
-You can access the source code at: https://github.com/amillner/pyiat
-
-How to get help or provide feedback
-------------------------------------------------
-
-For help or feedback, please enter an `issue on Github`_
 
 Documentation
 -------------
@@ -41,6 +32,17 @@ Documentation
    install
    userguide
    arguments
+
+
+How to get help or provide feedback
+------------------------------------------------
+
+For help or feedback, please enter an `issue on Github`_
+
+Source code
+-----------
+
+You can access the source code at: https://github.com/amillner/pyiat
 
 .. Links
 
