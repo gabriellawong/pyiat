@@ -1,5 +1,5 @@
 **********
-pyiat
+Arguments
 **********
 
 Analyze Implicit Association Test data
