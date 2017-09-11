@@ -2,10 +2,6 @@ import pandas as pd
 import numpy as np
 from pandas import ExcelWriter
 
-import pandas as pd
-import numpy as np
-from pandas import ExcelWriter
-
 def iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted):
 
     '''

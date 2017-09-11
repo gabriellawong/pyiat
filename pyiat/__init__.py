@@ -1,1 +1,1 @@
-import pyiat
+from pyiat.pyiat import *
