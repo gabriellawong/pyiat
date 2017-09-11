@@ -32,18 +32,18 @@ To run the standard weighted IAT scoring algorithm enter
 - name of the column containing block number and
 - a list of which 4 blocks to score
 
-It will return a dataframe containing error percentages, percentages of too fast/too slow trials, poor performance flags (e.g. a subject made more errors than the cutoff for poor performance) and D scores. 
-
 ::
 
     d1=pyiat.analyze_iat(d,subject='subjnum',rt='latency',condition='condition',correct='correct',cond1='Death/Not Me,Life/Me',cond2='Life/Not Me,Death/Me',block='block',blocks=[2,3,5,6])
 
 
-To run an unweighted IAT scoring algorithm just add the argument 'weighted = True'. The unweighted algorithm will not provide output by block. 
+It will return a dataframe containing error percentages, percentages of too fast/too slow trials, poor performance flags (e.g. a subject made more errors than the cutoff for poor performance) and D scores. 
+
+|  To run an unweighted IAT scoring algorithm just add the argument 'weighted = False'. The unweighted algorithm will not provide output by block. 
 
 ::
 
-    d1=pyiat.analyze_iat(d,subject='subjnum',rt='latency',condition='condition',correct='correct',cond1='Death/Not Me,Life/Me',cond2='Life/Not Me,Death/Me', weighted=True)
+    d1=pyiat.analyze_iat(d,subject='subjnum',rt='latency',condition='condition',correct='correct',cond1='Death/Not Me,Life/Me',cond2='Life/Not Me,Death/Me', weighted=False)
 
 Examples
 ------------------------------------------------
