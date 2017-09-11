@@ -1,8 +1,8 @@
 **********
-Arguments
+Arguments for pyiat
 **********
 
-Analyze Implicit Association Test data
+pyiat: a Python package to analyze Implicit Association Test (IAT) data
 
 
 
