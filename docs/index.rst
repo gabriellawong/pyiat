@@ -17,8 +17,8 @@ pyiat currently supports:
 
 * Analysis of the IAT and Brief IAT (BIAT) 
 * IAT can be analyzed with weighted or unweighted algorithm
-* BIAT can include 1, 2, or 3 blocks 
-* Can obtain D scores for each stimulus (word)
+** BIAT can include 1, 2, or 3 blocks 
+* Obtain D scores for each stimulus (e.g. word)
 * Output includes overall error percentage as well as error percentages by block (if using a weighted score) and by condition 
 * Same output (overall, by block, by condition) for trials considered too fast or too slow
 * Can set reaction time for trials considered too fast or too slow
@@ -30,10 +30,10 @@ Source code
 
 You can access the source code at: https://github.com/amillner/pyiat
 
-How to get help, contribute, or provide feedback
+How to get help or provide feedback
 ------------------------------------------------
 
-See our :doc:`feedback and contribution submission guidelines <contribute>`.
+For help or feedback, please enter an 'issue on Github'_
 
 Documentation
 -------------
@@ -41,6 +41,10 @@ Documentation
 .. toctree::
    :maxdepth: 2
 
-   install
-   userguide
-   arguments
+	install
+	userguide
+	arguments
+
+.. Links
+
+.. _'issue on Github': https://github.com/amillner/pyiat/issues
