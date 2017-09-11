@@ -21,16 +21,18 @@ Importing pyiat
 Using pyiat
 ==========================================
 
-To run the standard weighted IAT scoring algorithm that will return a dataframe error percentages, percentages of too fast/too slow trials, poor performance flags (e.g. a subject made more errors than the cutoff for poor performance) and D scores, enter 
+To run the standard weighted IAT scoring algorithm enter 
 
-- the pandas dataframe contain raw IAT data
-- column containing subject numbers
-- column containing reaction time
-- column containing the condition for each trial
-- column containing accuracy where 1 is correct and 0 is an error (can enter an argument to switch where error is 1 and correct is 0) 
+- the pandas dataframe containing raw IAT data (all trials for all subjects together)
+- name of column containing subject numbers
+- name of column containing reaction time
+- name of column containing the condition for each trial
+- name of column containing accuracy where 1 is correct and 0 is an error (see Additional Options below for information on entering a column where errors are 1 and correct trials are 0) 
 - the name of each condition (maximum 2)
-- the column containing block number and
-- a list of which 4 blocks
+- name of the column containing block number and
+- a list of which 4 blocks to score
+
+It will return a dataframe containing error percentages, percentages of too fast/too slow trials, poor performance flags (e.g. a subject made more errors than the cutoff for poor performance) and D scores. 
 
 ::
 
@@ -43,6 +45,10 @@ To run an unweighted IAT scoring algorithm just add the argument 'weighted = Tru
 
     d1=pyiat.analyze_iat(d,subject='subjnum',rt='latency',condition='condition',correct='correct',cond1='Death/Not Me,Life/Me',cond2='Life/Not Me,Death/Me', weighted=True)
 
+Examples
+------------------------------------------------
+For more details of the input, output and more examples of pyiat see the `Jupyter notebook`_ located on Github. There is also simulated data on Github_ as well. 
+
 Additional features
 ==========================================
 
@@ -53,7 +59,7 @@ Additional features
 - Can analyze the Brief IAT by setting 'biat' argument to *True*. When analyzing the biat, you can set the number of trials to remove from the beginning of each block ('biat_rmv_xtrls', default : 4) but you have to give pyiat the column that contains the trial number for each trial in the argument 'biat_trl_num'.
 - Can return D score for each stimulus (word) in the IAT. This score can be weighted or unweighted, although weighted will return fewer scores because some blocks may not contain a word. This can be used with BIAT as well, although it is recommended you use unweighted as weighted results in many similar D scores because there is a word is often present only once a block.  
 
--See the :doc:'Arguments documentation <arguments>'
+-See the :doc: 'arguments'
 
 Additional options
 ==========================================
@@ -63,11 +69,7 @@ Additional options
 -To return the nuumber of errors and too fast\too slow trials rather than percentages set the 'flag_outformat' to *count*.
 -Output an Excel files with all returned data by setting 'print_to_excel' to *True*.
 
--See the :doc:'Arguments documentation <arguments>'
-
-Examples
-------------------------------------------------
-    For more details of the input, output and more examples of pyiat see the `Jupyter notebook`_ located on Github. There is also simulated data on Github_ as well. 
+-See the :doc: 'arguments'
 
 
 .. _`Jupyter notebook`: https://nbviewer.jupyter.org/github/amillner/pyiat/blob/master/example/pyiat_example.ipynb
