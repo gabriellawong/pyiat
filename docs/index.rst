@@ -19,7 +19,7 @@ pyiat currently supports:
 * Output includes overall error percentage as well as error percentages by block (if using a weighted score) and by condition 
 * Same output (overall, by block, by condition) for trials considered too fast or too slow
 * Can set reaction time for trials considered too fast or too slow
-* Can set cutoffs for error\too fast\too slow flags indiciating that a participant is excluded for poor performance
+* Can set cutoffs for error/too fast/too slow flags indiciating that a participant is excluded for poor performance
 * Can print output to Excel 
  
 Source code
@@ -30,7 +30,7 @@ You can access the source code at: https://github.com/amillner/pyiat
 How to get help or provide feedback
 ------------------------------------------------
 
-For help or feedback, please enter an 'issue on Github'_
+For help or feedback, please enter an `issue on Github`_
 
 Documentation
 -------------
@@ -44,4 +44,4 @@ Documentation
 
 .. Links
 
-.. _'issue on Github': https://github.com/amillner/pyiat/issues
+.. _`issue on Github`: https://github.com/amillner/pyiat/issues
