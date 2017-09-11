@@ -23,27 +23,24 @@ pyiat currently supports:
 * Can set reaction time for trials considered too fast or too slow
 * Can set cutoffs for error\too fast\too slow flags indiciating that a participant is excluded for poor performance
 * Can print output to Excel 
- 
-Source code
------------
 
-You can access the source code at: https://github.com/amillner/pyiat
+see the Documentation_ for more details
+
+Examples
+------------------------------------------------
+    For details of the input, output and more examples of pyiat see the `Jupyter notebook`_ located on Github. There is also simulated data on Github_ as well. 
+
+
+.. _`Jupyter notebook`: https://nbviewer.jupyter.org/github/amillner/pyiat/blob/master/example/pyiat_example.ipynb
+.. _Github: https://github.com/amillner/pyiat/tree/master/example
+
 
 How to get help or provide feedback
 ------------------------------------------------
 
 For help or feedback, please enter an 'issue on Github'_
 
-Documentation
--------------
-
-.. toctree::
-   :maxdepth: 2
-
-   install
-   userguide
-   arguments
-
 .. Links
 
+.. _documentation: http://pyiat.readthedocs.io/en/latest/
 .. _'issue on Github': https://github.com/amillner/pyiat/issues
