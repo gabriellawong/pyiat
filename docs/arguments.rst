@@ -3,7 +3,7 @@ Arguments
 **********
 
 Analyze Implicit Association Test data
-------------------------------------------------------
+
 
 
 .. py:function:: analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,[blocks=[2,3,5,6]],[weighted=True],[fast_rt=400],[slow_rt=10000],[overall_err_cut=.3],[cond_err_cut=.4],[block_err_cut=.4],[overall_fastslowRT_cut=.10],[cond_fastslowRT_cut=.25],[block_fastslowRT_cut=.25],[num_blocks_cutoff=4],[fastslow_stats=False],[biat=False],[biat_rmv_xtrls=4],[biat_trl_num=False],[error_or_correct='correct'],[errors_after_fastslow_rmvd=False],[flag_outformat='pct'],[print_to_excel=False],[each_stim=False],[stimulus=False]):
