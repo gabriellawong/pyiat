@@ -59,17 +59,17 @@ Additional features
 - Can analyze the Brief IAT by setting 'biat' argument to *True*. When analyzing the biat, you can set the number of trials to remove from the beginning of each block ('biat_rmv_xtrls', default : 4) but you have to give pyiat the column that contains the trial number for each trial in the argument 'biat_trl_num'.
 - Can return D score for each stimulus (word) in the IAT. This score can be weighted or unweighted, although weighted will return fewer scores because some blocks may not contain a word. This can be used with BIAT as well, although it is recommended you use unweighted as weighted results in many similar D scores because there is a word is often present only once a block.  
 
--See the :doc:`arguments`
+- See the :doc:`arguments`
 
 Additional options
 ==========================================
 
--Can enter an accuracy column where correct is 1 and errors are 0 (default) or where errors are 1 and correct or 0 by entering *error* for the argument 'error_or_correct'.
--Currently, pyiat reports percentage of errors prior to removing all trials where reaction time was too fast or too slow. Setting the argument 'errors_after_fastslow_rmvd' to *True* will calculate error rate after removing all too fast or too slow trials. This is the way the R package iat calculates error rate. 
--To return the nuumber of errors and too fast\too slow trials rather than percentages set the 'flag_outformat' to *count*.
--Output an Excel files with all returned data by setting 'print_to_excel' to *True*.
+- Can enter an accuracy column where correct is 1 and errors are 0 (default) or where errors are 1 and correct or 0 by entering *error* for the argument 'error_or_correct'.
+- Currently, pyiat reports percentage of errors prior to removing all trials where reaction time was too fast or too slow. Setting the argument 'errors_after_fastslow_rmvd' to *True* will calculate error rate after removing all too fast or too slow trials. This is the way the R package iat calculates error rate. 
+- To return the nuumber of errors and too fast\too slow trials rather than percentages set the 'flag_outformat' to *count*.
+- Output an Excel files with all returned data by setting 'print_to_excel' to *True*.
 
--See the :doc:`arguments`
+- See the :doc:`arguments`
 
 
 .. _`Jupyter notebook`: https://nbviewer.jupyter.org/github/amillner/pyiat/blob/master/example/pyiat_example.ipynb
