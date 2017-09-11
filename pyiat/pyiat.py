@@ -449,7 +449,7 @@ def get_error_fastslow_rates(df,correct,subject,condition,block,cond1,cond2,bloc
 
     return(outcms)
 
-def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block,blocks=[2,3,5,6],weighted=True,\
+def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks=[2,3,5,6],weighted=True,\
         fast_rt=400,slow_rt=10000,\
         overall_err_cut=.3,cond_err_cut=.4,block_err_cut=.4,\
         overall_fastslowRT_cut=.10,cond_fastslowRT_cut=.25,block_fastslowRT_cut=.25,\

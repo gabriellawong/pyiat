@@ -39,7 +39,7 @@ To run the standard weighted IAT scoring algorithm enter
 
 It will return a dataframe containing error percentages, percentages of too fast/too slow trials, poor performance flags (e.g. a subject made more errors than the cutoff for poor performance) and D scores. 
 
-|  To run an unweighted IAT scoring algorithm just add the argument 'weighted = False'. The unweighted algorithm will not provide output by block. 
+|  To run an unweighted IAT scoring algorithm just add the argument 'weighted = False'. The unweighted algorithm does not require 'block' or 'blocks' arguments and will not provide output by block. 
 
 ::
 
