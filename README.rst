@@ -7,7 +7,7 @@ pyiat is a Python package to analyze data from the Implicit Association Test (IA
 
 	Nosek, B. A., Bar-Anan, Y., Sriram, N., Axt, J., & Greenwald, A. G. (2014). Understanding and Using the Brief Implicit Association Test: Recommended Scoring Procedures. PLOS ONE, 9(12), e110938. https://doi.org/10.1371/journal.pone.0110938
 
-See the Documentation_ for more details installation instructions and usage.
+See the Documentation_ for more details on installation and usage.
 
 Features
 --------
@@ -23,6 +23,7 @@ pyiat currently supports:
 * Can set reaction time for trials considered too fast or too slow
 * Can set cutoffs for error\too fast\too slow flags indiciating that a participant is excluded for poor performance
 * Can print output to Excel 
+* Can return the total number and percentage of trials removed because they were too fast or too slow  
 
 see the Documentation_ for more details
 
@@ -39,9 +40,9 @@ For details of the input, output and more examples of pyiat see the `Jupyter not
 How to get help or provide feedback
 ------------------------------------------------
 
-For help or feedback, please enter an 'issue on Github'_
+For help or feedback, please enter an `issue on Github`_
 
 .. Links
 
 .. _documentation: http://pyiat.readthedocs.io/en/latest/
-.. _'issue on Github': https://github.com/amillner/pyiat/issues
+.. _`issue on Github`: https://github.com/amillner/pyiat/issues
