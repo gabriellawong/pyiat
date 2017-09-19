@@ -622,7 +622,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
 
     #Put together and put into rates - containing just the rates - 
     #and flags (i.e. whether the rate ) is over a threshold
-    flags=pd.DataFrame(columns=flag_col_names,index=df[subject].unique())
+    flags=pd.DataFrame(columns=flag_col_names,index=(df.groupby([subject]).subject.apply(lambda x: x.unique()[0])).tolist())
     rates=pd.concat(outcms,axis=1)
     rates.columns=col_names
 
@@ -652,7 +652,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
         dt=dt.strftime('%m_%d_%Y_%H_%M_%S')
 
         iat_excel = ExcelWriter('pyiat_output_%s.xlsx'%dt)
-        all_iat_out.to_excel('pyiat_output_%s.xlsx'%dt,sheet_name='pyiat')
+        all_iat_out.to_excel(iat_excel,sheet_name='pyiat')
         
 
     if fastslow_stats == True:
@@ -660,7 +660,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
             df=df_orig
         all_fast_slow_rt=overall_fast_slow_stats(df,rt,fast_rt,slow_rt,subject,flags)
         if print_to_excel==True:
-            all_fast_slow_rt.to_excel('pyiat_output_%s.xlsx'%dt,sheet_name='Num_Pct_Fast_Slow_RT_Trials')
+            all_fast_slow_rt.to_excel(iat_excel,sheet_name='Num_Pct_Fast_Slow_RT_Trials')
             iat_excel.save()
         return(all_iat_out,all_fast_slow_rt)
 
@@ -669,3 +669,5 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
         if print_to_excel==True:
             iat_excel.save()
         return(all_iat_out)
+
+
