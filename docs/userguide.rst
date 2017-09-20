@@ -71,6 +71,10 @@ Additional options
 
 - See the :doc:`arguments`
 
+Errors
+==========================================
+- If a single participant has more than 2 pairs of condition and block, pyiat will return an error message about reindexing from a duplicate index.
+- This can occur when a participant completes an IAT twice and the conditions are presented in a different order. If the conditions are presented in the same order, pyiat will combine all the trials but the output will contain how many trials were analyzed. 
 
 .. _`Jupyter notebook`: https://nbviewer.jupyter.org/github/amillner/pyiat/blob/master/example/pyiat_example.ipynb
 .. _Github: https://github.com/amillner/pyiat/tree/master/example
