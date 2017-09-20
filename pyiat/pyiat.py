@@ -622,7 +622,7 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
 
     #Put together and put into rates - containing just the rates - 
     #and flags (i.e. whether the rate ) is over a threshold
-    flags=pd.DataFrame(columns=flag_col_names,index=(df.groupby([subject]).subject.apply(lambda x: x.unique()[0])).tolist())
+    flags=pd.DataFrame(columns=flag_col_names,index=(df.groupby([subject])[subject].apply(lambda x: x.unique()[0])).tolist())
     rates=pd.concat(outcms,axis=1)
     rates.columns=col_names
 
