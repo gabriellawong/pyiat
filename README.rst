@@ -21,7 +21,7 @@ pyiat currently supports:
 * Output includes overall error percentage as well as error percentages by block (if using a weighted score) and by condition 
 * Same output (overall, by block, by condition) for trials considered too fast or too slow
 * Can set reaction time for trials considered too fast or too slow
-* Can set cutoffs for error/too fast/too slow flags indiciating that a participant is excluded for poor performance
+* Can set cutoffs for error/too fast/too slow flags indicating that a participant is excluded for poor performance
 * Can print output to Excel 
 * Can return the total number and percentage of trials removed because they were too fast or too slow  
 
