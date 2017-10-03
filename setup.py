@@ -8,5 +8,5 @@ setup(name='pyiat',
       author_email='alexmillner@gmail.com',
       license='GPL',
       packages=['pyiat'],
-      install_requires=['pandas','numpy','XlsxWriter'],
+      install_requires=['pandas','numpy'],
       zip_safe=False)
