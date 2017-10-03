@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from pandas import ExcelWriter
 
 def iat_get_dscore_each_stim(df,subject,rt,block,condition,stimulus,cond1,cond2,blocks,weighted):
 
@@ -564,7 +563,6 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     """
-
     idx=pd.IndexSlice
     df=df[(df[condition]==cond1)|(df[condition]==cond2)].copy(deep=True)
 
@@ -651,9 +649,9 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
         dt=datetime.now()
         dt=dt.strftime('%m_%d_%Y_%H_%M_%S')
 
-        iat_excel = ExcelWriter('pyiat_output_%s.xlsx'%dt)
+        iat_excel = pd.ExcelWriter('pyiat_output_%s.xlsx'%dt)
         all_iat_out.to_excel(iat_excel,sheet_name='pyiat')
-        
+
 
     if fastslow_stats == True:
         if biat == True:
@@ -669,5 +667,4 @@ def analyze_iat(df,subject,rt,correct,condition,cond1,cond2,block='block',blocks
         if print_to_excel==True:
             iat_excel.save()
         return(all_iat_out)
-
 
