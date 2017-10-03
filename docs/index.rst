@@ -1,4 +1,4 @@
-pyiat
+pyiat v.02
 =================
 
 pyiat is a Python package to analyze data from the Implicit Association Test (IAT) consistent with the standard IAT scoring algorithm (Greenwald et al., 2003) and Brief IAT scoring algorithm (Nosek et al., 2014). pyiat requires that data are in a pandas DataFrame. 
